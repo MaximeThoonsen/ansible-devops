@@ -1,0 +1,27 @@
+---
+- name: postgresql - add repository key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+
+- name: postgresql - add official postgresql repository
+  apt_repository: repo="deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" state=present
+
+- name: postgresql - add locale
+  command: /usr/sbin/locale-gen fr_FR.UTF-8
+
+- name: postgresql - install version 9.3
+  apt: pkg=postgresql-9.3 state=latest update_cache=yes
+
+- name: postgresql - create db
+  sudo_user: postgres
+  postgresql_db: name="myapp" encoding="UTF-8" lc_collate="fr_FR.UTF-8" lc_ctype="fr_FR.UTF-8" template='template0'
+
+- name: postgresql - create user
+  sudo_user: postgres
+  postgresql_user: db=myapp user=myapp password=myapp
+
+- name: postgresql - apply privileges
+  sudo_user: postgres
+  postgresql_privs: db=myapp privs=ALL type=database role=myapp
+
+- name: postgresql - install postgresql-contrib-9.3 --needed for fulltextsearch
+  apt: pkg=postgresql-contrib-9.3 state=latest update_cache=yes

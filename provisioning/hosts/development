@@ -1,0 +1,8 @@
+[backends:children]
+development
+
+[frontends:children]
+development
+
+[development]
+dev-myapphost

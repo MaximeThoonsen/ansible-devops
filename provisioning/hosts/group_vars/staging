@@ -1,0 +1,7 @@
+---
+api:
+  _self:
+    ip: 10.0.0.48
+
+domain:
+  _self: myapphost

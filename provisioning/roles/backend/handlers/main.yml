@@ -1,0 +1,9 @@
+---
+- name: restart-php5-fpm
+  service: name=php5-fpm state=restarted
+
+- name: locale-gen
+  command: /usr/sbin/locale-gen
+
+- name: restart-nginx
+  service: name=nginx state=restarted

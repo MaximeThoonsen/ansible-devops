@@ -1,0 +1,64 @@
+---
+- name: php5 - add 5.5 repository
+  apt_repository: repo=ppa:ondrej/php5 update_cache=yes
+
+- name: php5 - install fpm and cli
+  apt: pkg=php5-cli,php5-fpm state=latest update_cache=yes
+
+- name: php5 - install application configuration
+  copy: src=files/$item dest=/$item owner=root group=root mode=0644
+  with_items:
+    - etc/php5/mods-available/global.ini
+
+- name: php5 - link fpm configuration
+  file: $item state=link force=yes
+  notify: restart-php5-fpm
+  with_items:
+    - src=/etc/php5/mods-available/global.ini dest=/etc/php5/fpm/conf.d/99-global.ini
+
+- name: php5 - link cli configuration
+  file: $item state=link force=yes
+  notify: restart-php5-fpm
+  with_items:
+    - src=/etc/php5/mods-available/global.ini dest=/etc/php5/cli/conf.d/99-global.ini
+
+- name: php5 - remove default pool
+  file: dest=/etc/php5/fpm/pool.d/www.conf state=absent
+  notify: restart-php5-fpm
+
+- name: php5 - add application pool
+  template: src=templates/etc/php5/fpm/pool.d/pool.conf dest=/etc/php5/fpm/pool.d/${app.name}.conf owner=root group=root mode=0644
+  notify: restart-php5-fpm
+
+
+
+- name: nodejs - add stable repository
+  apt_repository: repo=ppa:chris-lea/node.js
+
+- name: nodejs - install node and npm
+  apt: pkg=nodejs state=latest update_cache=yes
+
+- name: nginx - add stable repository
+  apt_repository: repo=ppa:nginx/stable
+
+- name: nginx - install light version
+  apt: pkg=nginx-light state=latest update_cache=yes
+
+- name: nginx - remove default vhost
+  file: dest=/etc/nginx/sites-enabled/default state=absent
+  notify: restart-nginx
+
+- name: nginx - install vhost
+  template: src=templates/etc/nginx/sites-available/vhost dest=/etc/nginx/sites-available/${app.name} owner=root group=root mode=0644
+  notify: restart-nginx
+
+- name: nginx - create nginx conf file
+  template: src=templates/etc/nginx/nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=0644
+  notify: restart-nginx
+
+- name: nginx - link vhost
+  file: src=/etc/nginx/sites-available/${app.name} dest=/etc/nginx/sites-enabled/${app.name} state=link force=yes
+  notify: restart-nginx
+
+- name: add directory-api
+  lineinfile: dest=/etc/hosts line="{{ api._self.ip }} directory-api" regexp="^{{ api._self.ip }}"

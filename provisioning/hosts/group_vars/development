@@ -1,0 +1,7 @@
+---
+api:
+  _self:
+    ip: 199.199.199.69
+
+domain:
+  _self: dev-myapphost

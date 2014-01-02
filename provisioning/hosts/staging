@@ -1,0 +1,8 @@
+[backends:children]
+staging
+
+[frontends:children]
+staging
+
+[staging]
+@myapphost

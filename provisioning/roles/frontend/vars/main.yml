@@ -1,0 +1,10 @@
+---
+app:
+  name: myapp # should not contain space of special characters
+
+fpm:
+  socket_path: /tmp/${app.name}.sock
+
+nginx:
+  root: /var/www/myapphost/current/web
+  server_name: dev.myapphost

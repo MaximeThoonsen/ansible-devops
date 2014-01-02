@@ -1,0 +1,21 @@
+---
+- name: apply common configuration to all nodes
+  hosts: all
+  sudo: yes
+  gather_facts: true
+  roles:
+    - common
+
+- name: apply frontend configuration to frontends
+  hosts: frontends
+  sudo: yes
+  gather_facts: true
+  roles:
+    - frontend
+
+- name: apply backend configuration to backends
+  hosts: backends
+  sudo: yes
+  gather_facts: true
+  roles:
+    - backend
