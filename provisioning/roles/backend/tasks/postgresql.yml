@@ -13,15 +13,15 @@
 
 - name: postgresql - create db
   sudo_user: postgres
-  postgresql_db: name="myapp" encoding="UTF-8" lc_collate="fr_FR.UTF-8" lc_ctype="fr_FR.UTF-8" template='template0'
+  postgresql_db: name="${app.name}" encoding="UTF-8" lc_collate="fr_FR.UTF-8" lc_ctype="fr_FR.UTF-8" template='template0'
 
 - name: postgresql - create user
   sudo_user: postgres
-  postgresql_user: db=myapp user=myapp password=myapp
+  postgresql_user: db=${app.name} user=${app.name} password=${app.name}
 
 - name: postgresql - apply privileges
   sudo_user: postgres
-  postgresql_privs: db=myapp privs=ALL type=database role=myapp
+  postgresql_privs: db=${app.name} privs=ALL type=database role=${app.name}
 
 - name: postgresql - install postgresql-contrib-9.3 --needed for fulltextsearch
   apt: pkg=postgresql-contrib-9.3 state=latest update_cache=yes

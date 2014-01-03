@@ -1,10 +1,10 @@
 server {
     listen      80;
     server_name {{ nginx.server_name }};
-    root        /var/www/myapphost/current/path/web;
+    root        /var/www/{{ app.host }}/current/path/web;
 
-    error_log /var/www/myapphost/current/path/app/logs/nginx.error.log;
-    access_log /var/www/myapphost/current/path/app/logs/nginx.access.log;
+    error_log /var/www/{{ app.host }}/current/path/app/logs/nginx.error.log;
+    access_log /var/www/{{ app.host }}/current/path/app/logs/nginx.access.log;
 
     # strip app_dev.php/ prefix if it is present
     rewrite ^/app_dev\.php/?(.*)$ /$1 permanent;
@@ -19,7 +19,7 @@ server {
     }
 
     location ~ \.php(/|$) {
-        fastcgi_pass   unix:/tmp/myapp.sock;
+        fastcgi_pass   unix:{{ fpm.socket_path }};
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include        fastcgi_params;
         fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;

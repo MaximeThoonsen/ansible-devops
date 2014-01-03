@@ -30,13 +30,9 @@
   template: src=templates/etc/php5/fpm/pool.d/pool.conf dest=/etc/php5/fpm/pool.d/${app.name}.conf owner=root group=root mode=0644
   notify: restart-php5-fpm
 
-
-
-- name: nodejs - add stable repository
-  apt_repository: repo=ppa:chris-lea/node.js
-
-- name: nodejs - install node and npm
-  apt: pkg=nodejs state=latest update_cache=yes
+- name: PDO POSTGRESQL - install php5-pgsql
+  apt: pkg=php5-pgsql state=latest update_cache=yes
+  notify: restart-php5-fpm
 
 - name: nginx - add stable repository
   apt_repository: repo=ppa:nginx/stable
@@ -59,6 +55,3 @@
 - name: nginx - link vhost
   file: src=/etc/nginx/sites-available/${app.name} dest=/etc/nginx/sites-enabled/${app.name} state=link force=yes
   notify: restart-nginx
-
-- name: add directory-api
-  lineinfile: dest=/etc/hosts line="{{ api._self.ip }} directory-api" regexp="^{{ api._self.ip }}"
