@@ -1,0 +1,4 @@
+---
+app:
+  name: myapp # should not contain space of special characters
+  host: myapphost

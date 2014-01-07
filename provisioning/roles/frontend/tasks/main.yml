@@ -6,7 +6,7 @@
   apt: pkg=php5-cli,php5-fpm state=latest update_cache=yes
 
 - name: php5 - install application configuration
-  copy: src=files/$item dest=/$item owner=root group=root mode=0644
+  copy: src=files/$item dest=/{{item}} owner=root group=root mode=0644
   with_items:
     - etc/php5/mods-available/global.ini
 
@@ -27,7 +27,7 @@
   notify: restart-php5-fpm
 
 - name: php5 - add application pool
-  template: src=templates/etc/php5/fpm/pool.d/pool.conf dest=/etc/php5/fpm/pool.d/${app.name}.conf owner=root group=root mode=0644
+  template: src=templates/etc/php5/fpm/pool.d/pool.conf dest=/etc/php5/fpm/pool.d/{{ app.name }}.conf owner=root group=root mode=0644
   notify: restart-php5-fpm
 
 - name: PDO POSTGRESQL - install php5-pgsql
@@ -45,7 +45,7 @@
   notify: restart-nginx
 
 - name: nginx - install vhost
-  template: src=templates/etc/nginx/sites-available/vhost dest=/etc/nginx/sites-available/${app.name} owner=root group=root mode=0644
+  template: src=templates/etc/nginx/sites-available/vhost dest=/etc/nginx/sites-available/{{app.name}} owner=root group=root mode=0644
   notify: restart-nginx
 
 - name: nginx - create nginx conf file
@@ -53,5 +53,5 @@
   notify: restart-nginx
 
 - name: nginx - link vhost
-  file: src=/etc/nginx/sites-available/${app.name} dest=/etc/nginx/sites-enabled/${app.name} state=link force=yes
+  file: src=/etc/nginx/sites-available/{{app.name}} dest=/etc/nginx/sites-enabled/{{app.name}} state=link force=yes
   notify: restart-nginx

@@ -4,8 +4,8 @@ app:
   host: myapphost
 
 fpm:
-  socket_path: /tmp/${app.name}.sock
+  socket_path: /tmp/{{app.name}}.sock
 
 nginx:
-  root: /var/www/${app.host}/current/web
+  root: /var/www/{{app.host}}/current/web
   server_name: dev.myapphost
