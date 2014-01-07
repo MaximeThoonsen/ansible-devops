@@ -34,5 +34,6 @@ Vagrant.configure("2") do |config|
     ansible.inventory_path = "provisioning/hosts/development"
     ansible.sudo = true
     ansible.playbook = "provisioning/site.yml"
+    ansible.verbose = "v"
   end
 end
