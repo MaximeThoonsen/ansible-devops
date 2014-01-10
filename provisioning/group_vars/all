@@ -1,4 +1,3 @@
----
 app:
   name: myapp # should not contain space of special characters
   host: myapphost
@@ -9,3 +8,5 @@ fpm:
 nginx:
   root: /var/www/{{app.host}}/current/web
   server_name: dev.myapphost
+
+timezone: Europe/Paris
