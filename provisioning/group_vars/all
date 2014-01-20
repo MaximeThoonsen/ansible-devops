@@ -10,3 +10,6 @@ nginx:
   server_name: dev.myapphost
 
 timezone: Europe/Paris
+
+node:
+    install: true #set to false if you don't want node to be installed

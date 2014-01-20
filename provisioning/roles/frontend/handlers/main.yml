@@ -1,4 +1,8 @@
 ---
+
+- name: install symfony2 project
+  command: chdir=/var/www/myapphost/current/path ./composer.phar install
+
 - name: restart-php5-fpm
   service: name=php5-fpm state=restarted
 

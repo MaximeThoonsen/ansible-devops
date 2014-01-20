@@ -1,4 +1,12 @@
 ---
+- name: nodejs - add stable repository
+  apt_repository: repo=ppa:chris-lea/node.js
+  when : node.install
+
+- name: nodejs - install node and npm
+  apt: pkg=nodejs state=latest update_cache=yes
+  when : node.install
+
 - name: php5 - add 5.5 repository
   apt_repository: repo=ppa:ondrej/php5 update_cache=yes
 
@@ -28,7 +36,9 @@
 
 - name: php5 - add application pool
   template: src=templates/etc/php5/fpm/pool.d/pool.conf dest=/etc/php5/fpm/pool.d/{{ app.name }}.conf owner=root group=root mode=0644
-  notify: restart-php5-fpm
+  notify:
+    - restart-php5-fpm
+    - install symfony2 project
 
 - name: PDO POSTGRESQL - install php5-pgsql
   apt: pkg=php5-pgsql state=latest update_cache=yes
