@@ -1,9 +1,21 @@
 ---
+- name: nodejs - add stable repository
+  apt_repository: repo=ppa:chris-lea/node.js
+
+- name: nodejs - install node and npm
+  apt: pkg=nodejs state=latest update_cache=yes
+
 - name: php5 - add 5.5 repository
   apt_repository: repo=ppa:ondrej/php5 update_cache=yes
 
 - name: php5 - install fpm and cli
   apt: pkg=php5-cli,php5-fpm state=latest update_cache=yes
+
+- name: php5 - install php5-dev
+  apt: pkg=php5-dev state=latest update_cache=yes
+
+- name: php5 - install php-pear
+  apt: pkg=php-pear state=latest update_cache=yes
 
 - name: php5 - install application configuration
   copy: src=files/$item dest=/{{item}} owner=root group=root mode=0644
